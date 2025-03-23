@@ -1,0 +1,998 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language [
+<!ENTITY ident "(?:[a-zA-Z_][a-zA-Z0-9_]*)">
+<!ENTITY bin_int "(?:[01]+(?:_[01]+)*)">
+<!ENTITY dec_int "(?:[0-9]+(?:_[0-9]+)*)">
+<!ENTITY hex_int "(?:[0-9A-Fa-f]+(?:_[0-9A-Fa-f]+)*)">
+<!ENTITY float_lit "(?:&dec_int;\.&dec_int;?|\.\d&dec_int;)(?:[eE][+-]?&dec_int;)?f?|&dec_int;[eE][+-]?&dec_int;f?">
+<!ENTITY hexfloat_lit "0x(?:&hex_int;\.&hex_int;?|\.&hex_int;)(?:[pP][+-]?&dec_int;)?f?">
+<!ENTITY decimal_float_lit "(?:0[fh]|[1-9][0-9]*[fh]|[0-9]*\.[0-9]+(?:[eE][+-]?[0-9]+)?[fh]?|[0-9]+\.[0-9]*(?:[eE][+-]?[0-9]+)?[fh]?|[0-9]+[eE][+-]?[0-9]+[fh]?)">
+<!ENTITY hex_float_lit "(?:0[xX][0-9a-fA-F]*\.[0-9a-fA-F]+(?:[pP][+-]?[0-9]+[fh]?)?|0[xX][0-9a-fA-F]+\.[0-9a-fA-F]*(?:[pP][+-]?[0-9]+[fh]?)?|0[xX][0-9a-fA-F]+[pP][+-]?[0-9]+[fh]?)">
+<!ENTITY decimal_int_lit "(?:0[iu]?|[1-9][0-9]*[iu]?)">
+<!ENTITY hex_int_lit "(?:0[xX][0-9a-fA-F]+[iu]?)">
+]>
+<language name="WGSL" version="3" kateversion="5.0" section="Sources" extensions="*.wgsl" mimetype="text/wgsl" license="MIT">
+    <highlighting>
+        <!-- regular keywords -->
+        <list name="keywords">
+            <item>alias</item>
+            <item>const</item>
+            <item>const_assert</item>
+            <item>diagnostic</item>
+            <item>enable</item>
+            <item>fn</item>
+            <item>let</item>
+            <item>override</item>
+            <item>requires</item>
+            <item>struct</item>
+            <item>type</item>
+            <item>var</item>
+        </list>
+
+        <!-- Control flow  -->
+        <list name="control_flow">
+            <item>break</item>
+            <item>case</item>
+            <item>continue</item>
+            <item>continuing</item>
+            <item>default</item>
+            <item>discard</item>
+            <item>else</item>
+            <item>for</item>
+            <item>if</item>
+            <item>loop</item>
+            <item>return</item>
+            <item>switch</item>
+            <item>while</item>
+            <item>fallthrough</item>
+        </list>
+
+        <!-- Constants -->
+        <list name="constants">
+            <item>true</item>
+            <item>false</item>
+        </list>
+
+        <!-- Storage & Access -->
+        <list name="storage">
+            <item>function</item>
+            <item>private</item>
+            <item>workgroup</item>
+            <item>uniform</item>
+            <item>storage</item>
+            <item>handle</item>
+            <item>read</item>
+            <item>read_write</item>
+            <item>write</item>
+        </list>
+
+        <!-- Directive Keywords -->
+        <list name="directives">
+            <item>enable</item>
+            <item>requires</item>
+            <item>diagnostic</item>
+        </list>
+
+        <!-- Diagnostic Severity -->
+        <list name="diagnostic_severity">
+            <item>error</item>
+            <item>warning</item>
+            <item>info</item>
+            <item>off</item>
+        </list>
+
+        <!-- Enable Extensions -->
+        <list name="enable_extensions">
+            <item>f16</item>
+            <item>clip_distances</item>
+            <item>dual_source_blending</item>
+            <item>subgroups</item>
+        </list>
+
+        <!-- Language Extensions -->
+        <list name="language_extensions">
+            <item>readonly_and_readwrite_storage_textures</item>
+            <item>packed_4x8_integer_dot_product</item>
+            <item>unrestricted_pointer_parameters</item>
+            <item>pointer_composite_access</item>
+        </list>
+
+        <!-- Attributes & Interpolation -->
+        <list name="attributes">
+            <item>align</item>
+            <item>binding</item>
+            <item>builtin</item>
+            <item>compute</item>
+            <item>const</item>
+            <item>diagnostic</item>
+            <item>fragment</item>
+            <item>group</item>
+            <item>id</item>
+            <item>interpolate</item>
+            <item>invariant</item>
+            <item>location</item>
+            <item>blend_src</item>
+            <item>must_use</item>
+            <item>size</item>
+            <item>vertex</item>
+            <item>workgroup_size</item>
+            <item>rounding_mode</item>
+        </list>
+
+        <!-- Interpolation -->
+        <list name="interpolation">
+            <item>center</item>
+            <item>centroid</item>
+            <item>flat</item>
+            <item>linear</item>
+            <item>perspective</item>
+            <item>sample</item>
+            <item>first</item>
+            <item>either</item>
+        </list>
+
+        <!-- Scalar Types -->
+        <list name="scalar_types">
+            <item>bool</item>
+            <item>i32</item>
+            <item>u32</item>
+            <item>f32</item>
+            <item>f16</item>
+        </list>
+
+        <!-- Atomic Types -->
+        <list name="atomic_types">
+            <item>atomic</item>
+        </list>
+
+        <!-- Vector Types (Non-Aliased) -->
+        <list name="vector_types">
+            <item>vec2</item>
+            <item>vec3</item>
+            <item>vec4</item>
+        </list>
+
+        <!-- Matrix Types (Non-Aliased) -->
+        <list name="matrix_types">
+            <item>mat2x2</item>
+            <item>mat2x3</item>
+            <item>mat2x4</item>
+            <item>mat3x2</item>
+            <item>mat3x3</item>
+            <item>mat3x4</item>
+            <item>mat4x2</item>
+            <item>mat4x3</item>
+            <item>mat4x4</item>
+        </list>
+
+        <!-- Vector Type Aliases -->
+        <list name="vector_aliases">
+            <item>vec2i</item>
+            <item>vec3i</item>
+            <item>vec4i</item>
+            <item>vec2u</item>
+            <item>vec3u</item>
+            <item>vec4u</item>
+            <item>vec2f</item>
+            <item>vec3f</item>
+            <item>vec4f</item>
+            <item>vec2h</item>
+            <item>vec3h</item>
+            <item>vec4h</item>
+        </list>
+
+        <!-- Matrix Type Aliases -->
+        <list name="matrix_aliases">
+            <item>mat2x2f</item>
+            <item>mat2x3f</item>
+            <item>mat2x4f</item>
+            <item>mat3x2f</item>
+            <item>mat3x3f</item>
+            <item>mat3x4f</item>
+            <item>mat4x2f</item>
+            <item>mat4x3f</item>
+            <item>mat4x4f</item>
+            <item>mat2x2h</item>
+            <item>mat2x3h</item>
+            <item>mat2x4h</item>
+            <item>mat3x2h</item>
+            <item>mat3x3h</item>
+            <item>mat3x4h</item>
+            <item>mat4x2h</item>
+            <item>mat4x3h</item>
+            <item>mat4x4h</item>
+        </list>
+
+        <!-- Other Type-Related Keywords -->
+        <list name="type_generators">
+            <item>array</item>
+            <item>ptr</item>
+            <item>ref</item>
+        </list>
+
+        <!-- Texture Types -->
+        <list name="texture_types">
+            <item>texture_1d</item>
+            <item>texture_2d</item>
+            <item>texture_2d_array</item>
+            <item>texture_3d</item>
+            <item>texture_cube</item>
+            <item>texture_cube_array</item>
+            <item>texture_multisampled_2d</item>
+            <item>texture_external</item>
+            <item>texture_storage_1d</item>
+            <item>texture_storage_2d</item>
+            <item>texture_storage_2d_array</item>
+            <item>texture_storage_3d</item>
+            <item>texture_depth_2d</item>
+            <item>texture_depth_2d_array</item>
+            <item>texture_depth_cube</item>
+            <item>texture_depth_cube_array</item>
+            <item>texture_depth_multisampled_2d</item>
+            <item>sampler</item>
+            <item>sampler_comparison</item>
+        </list>
+
+        <!-- Predeclared Enumerants -->
+        <list name="predeclared_enumerants">
+            <item>read</item>
+            <item>write</item>
+            <item>read_write</item>
+            <item>function</item>
+            <item>private</item>
+            <item>workgroup</item>
+            <item>uniform</item>
+            <item>storage</item>
+        </list>
+
+        <!-- Special Values - Only used within specific contexts (@builtin attributes) -->
+        <list name="special_values">
+            <!-- Built-in Value Names -->
+            <item>vertex_index</item>
+            <item>instance_index</item>
+            <item>position</item>
+            <item>front_facing</item>
+            <item>frag_depth</item>
+            <item>sample_index</item>
+            <item>sample_mask</item>
+            <item>local_invocation_id</item>
+            <item>local_invocation_index</item>
+            <item>global_invocation_id</item>
+            <item>workgroup_id</item>
+            <item>num_workgroups</item>
+            <item>subgroup_invocation_id</item>
+            <item>subgroup_size</item>
+            <item>clip_distances</item>
+
+            <!-- Diagnostic Rules -->
+            <item>derivative_uniformity</item>
+            <item>subgroup_uniformity</item>
+
+            <!-- Texel formats -->
+            <item>rgba8unorm</item>
+            <item>rgba8snorm</item>
+            <item>rgba8uint</item>
+            <item>rgba8sint</item>
+            <item>rgba16uint</item>
+            <item>rgba16sint</item>
+            <item>rgba16float</item>
+            <item>r32uint</item>
+            <item>r32sint</item>
+            <item>r32float</item>
+            <item>rg32uint</item>
+            <item>rg32sint</item>
+            <item>rg32float</item>
+            <item>rgba32uint</item>
+            <item>rgba32sint</item>
+            <item>rgba32float</item>
+            <item>bgra8unorm</item>
+        </list>
+
+        <!-- Built-in functions -->
+        <list name="functions">
+            <!-- Constructor functions -->
+            <item>array</item>
+            <item>bool</item>
+            <item>f16</item>
+            <item>f32</item>
+            <item>i32</item>
+            <item>mat2x2</item>
+            <item>mat2x3</item>
+            <item>mat2x4</item>
+            <item>mat3x2</item>
+            <item>mat3x3</item>
+            <item>mat3x4</item>
+            <item>mat4x2</item>
+            <item>mat4x3</item>
+            <item>mat4x4</item>
+            <item>u32</item>
+            <item>vec2</item>
+            <item>vec3</item>
+            <item>vec4</item>
+
+            <!-- Bit Reinterpretation -->
+            <item>bitcast</item>
+
+            <!-- Logical functions -->
+            <item>all</item>
+            <item>any</item>
+            <item>select</item>
+
+            <!-- Array functions -->
+            <item>arrayLength</item>
+
+            <!-- Numeric functions -->
+            <item>abs</item>
+            <item>acos</item>
+            <item>acosh</item>
+            <item>asin</item>
+            <item>asinh</item>
+            <item>atan</item>
+            <item>atanh</item>
+            <item>atan2</item>
+            <item>ceil</item>
+            <item>clamp</item>
+            <item>cos</item>
+            <item>cosh</item>
+            <item>countLeadingZeros</item>
+            <item>countOneBits</item>
+            <item>countTrailingZeros</item>
+            <item>cross</item>
+            <item>degrees</item>
+            <item>determinant</item>
+            <item>distance</item>
+            <item>dot</item>
+            <item>dot4U8Packed</item>
+            <item>dot4I8Packed</item>
+            <item>exp</item>
+            <item>exp2</item>
+            <item>extractBits</item>
+            <item>faceForward</item>
+            <item>firstLeadingBit</item>
+            <item>firstTrailingBit</item>
+            <item>floor</item>
+            <item>fma</item>
+            <item>fract</item>
+            <item>frexp</item>
+            <item>insertBits</item>
+            <item>inverseSqrt</item>
+            <item>ldexp</item>
+            <item>length</item>
+            <item>log</item>
+            <item>log2</item>
+            <item>max</item>
+            <item>min</item>
+            <item>mix</item>
+            <item>modf</item>
+            <item>normalize</item>
+            <item>pow</item>
+            <item>quantizeToF16</item>
+            <item>radians</item>
+            <item>reflect</item>
+            <item>refract</item>
+            <item>reverseBits</item>
+            <item>round</item>
+            <item>saturate</item>
+            <item>sign</item>
+            <item>sin</item>
+            <item>sinh</item>
+            <item>smoothstep</item>
+            <item>sqrt</item>
+            <item>step</item>
+            <item>tan</item>
+            <item>tanh</item>
+            <item>transpose</item>
+            <item>trunc</item>
+
+            <!-- Derivative functions -->
+            <item>dpdx</item>
+            <item>dpdxCoarse</item>
+            <item>dpdxFine</item>
+            <item>dpdy</item>
+            <item>dpdyCoarse</item>
+            <item>dpdyFine</item>
+            <item>fwidth</item>
+            <item>fwidthCoarse</item>
+            <item>fwidthFine</item>
+
+            <!-- Texture functions -->
+            <item>textureDimensions</item>
+            <item>textureGather</item>
+            <item>textureGatherCompare</item>
+            <item>textureLoad</item>
+            <item>textureNumLayers</item>
+            <item>textureNumLevels</item>
+            <item>textureNumSamples</item>
+            <item>textureSample</item>
+            <item>textureSampleBias</item>
+            <item>textureSampleCompare</item>
+            <item>textureSampleCompareLevel</item>
+            <item>textureSampleGrad</item>
+            <item>textureSampleLevel</item>
+            <item>textureSampleBaseClampToEdge</item>
+            <item>textureStore</item>
+
+            <!-- Atomic functions -->
+            <item>atomicLoad</item>
+            <item>atomicStore</item>
+            <item>atomicAdd</item>
+            <item>atomicSub</item>
+            <item>atomicMax</item>
+            <item>atomicMin</item>
+            <item>atomicAnd</item>
+            <item>atomicOr</item>
+            <item>atomicXor</item>
+            <item>atomicExchange</item>
+            <item>atomicCompareExchangeWeak</item>
+
+            <!-- Data packing functions -->
+            <item>pack4x8snorm</item>
+            <item>pack4x8unorm</item>
+            <item>pack4xI8</item>
+            <item>pack4xU8</item>
+            <item>pack4xI8Clamp</item>
+            <item>pack4xU8Clamp</item>
+            <item>pack2x16snorm</item>
+            <item>pack2x16unorm</item>
+            <item>pack2x16float</item>
+
+            <!-- Data unpacking functions -->
+            <item>unpack4x8snorm</item>
+            <item>unpack4x8unorm</item>
+            <item>unpack4xI8</item>
+            <item>unpack4xU8</item>
+            <item>unpack2x16snorm</item>
+            <item>unpack2x16unorm</item>
+            <item>unpack2x16float</item>
+
+            <!-- Synchronization functions -->
+            <item>storageBarrier</item>
+            <item>textureBarrier</item>
+            <item>workgroupBarrier</item>
+            <item>workgroupUniformLoad</item>
+
+            <!-- Subgroup functions -->
+            <item>subgroupAdd</item>
+            <item>subgroupExclusiveAdd</item>
+            <item>subgroupInclusiveAdd</item>
+            <item>subgroupAll</item>
+            <item>subgroupAnd</item>
+            <item>subgroupAny</item>
+            <item>subgroupBallot</item>
+            <item>subgroupBroadcast</item>
+            <item>subgroupBroadcastFirst</item>
+            <item>subgroupElect</item>
+            <item>subgroupMax</item>
+            <item>subgroupMin</item>
+            <item>subgroupMul</item>
+            <item>subgroupExclusiveMul</item>
+            <item>subgroupInclusiveMul</item>
+            <item>subgroupOr</item>
+            <item>subgroupShuffle</item>
+            <item>subgroupShuffleDown</item>
+            <item>subgroupShuffleUp</item>
+            <item>subgroupShuffleXor</item>
+            <item>subgroupXor</item>
+
+            <!-- Quad functions -->
+            <item>quadBroadcast</item>
+            <item>quadSwapDiagonal</item>
+            <item>quadSwapX</item>
+            <item>quadSwapY</item>
+
+            <!-- Special result types for frexp and modf -->
+            <item>__frexp_result_abstract</item>
+            <item>__frexp_result_f32</item>
+            <item>__frexp_result_f16</item>
+            <item>__frexp_result_vecN_abstract</item>
+            <item>__frexp_result_vecN_f32</item>
+            <item>__frexp_result_vecN_f16</item>
+            <item>__modf_result_abstract</item>
+            <item>__modf_result_f32</item>
+            <item>__modf_result_f16</item>
+            <item>__modf_result_vecN_abstract</item>
+            <item>__modf_result_vecN_f32</item>
+            <item>__modf_result_vecN_f16</item>
+        </list>
+
+        <!-- Comment documentation markers - Add support for standard documentation patterns -->
+        <list name="documentation_markers">
+            <item>@param</item>
+            <item>@return</item>
+            <item>@brief</item>
+            <item>@example</item>
+            <item>@see</item>
+            <item>@todo</item>
+            <item>@author</item>
+            <item>@version</item>
+            <item>@note</item>
+        </list>
+
+        <contexts>
+            <context attribute="Normal Text" lineEndContext="#stay" name="Normal">
+                <DetectSpaces/>
+
+                <!-- Module-scope directives detection - must appear before declarations -->
+                <RegExpr attribute="Directive Keyword" context="DirectiveStatement" String="^(diagnostic|enable|requires)\b" lookAhead="true"/>
+
+                <!-- Enhanced entry point detection for all shader stages -->
+                <RegExpr attribute="Attribute" context="ShaderStageAttribute" String="@(vertex|fragment|compute)\b"/>
+                <RegExpr attribute="Attribute" context="WorkgroupSizeAttribute" String="@workgroup_size\b"/>
+
+                <!-- Keywords - Now with separate control flow -->
+                <keyword attribute="Keyword" context="#stay" String="keywords"/>
+                <keyword attribute="Control Flow" context="#stay" String="control_flow"/>
+                <keyword attribute="Constant" context="#stay" String="constants"/>
+                <keyword attribute="Storage Class" context="#stay" String="storage"/>
+                <keyword attribute="Attribute" context="#stay" String="attributes"/>
+                <keyword attribute="Interpolation" context="#stay" String="interpolation"/>
+
+                <!-- Types - With improved handling -->
+                <keyword attribute="Data Type" context="#stay" String="scalar_types"/>
+                <keyword attribute="Data Type" context="#stay" String="atomic_types"/>
+                <keyword attribute="Data Type" context="TemplateStart" String="vector_types" lookAhead="true"/>
+                <keyword attribute="Data Type" context="TemplateStart" String="matrix_types" lookAhead="true"/>
+                <keyword attribute="Data Type" context="#stay" String="vector_aliases"/>
+                <keyword attribute="Data Type" context="#stay" String="matrix_aliases"/>
+                <keyword attribute="Data Type" context="TemplateStart" String="type_generators" lookAhead="true"/>
+                <keyword attribute="Texture Type" context="TemplateStart" String="texture_types" lookAhead="true"/>
+
+                <!-- Improved recognition of reference and pointer types -->
+                <RegExpr attribute="Data Type" context="TemplateArgs" String="ptr\s*&lt;"/>
+                <RegExpr attribute="Data Type" context="TemplateArgs" String="ref\s*&lt;"/>
+
+                <keyword attribute="Enumerant" context="#stay" String="predeclared_enumerants"/>
+
+                <!-- REMOVED: No longer highlight special_values in the main context -->
+                <!-- <keyword attribute="Built-in Value" context="#stay" String="special_values"/> -->
+
+                <keyword attribute="Built-in Function" context="#stay" String="functions"/>
+                <keyword attribute="Diagnostic Severity" context="#stay" String="diagnostic_severity"/>
+
+                <!-- Declarations detection -->
+                <RegExpr attribute="Keyword" context="Function" String="fn\s+&ident;" lookAhead="true"/>
+                <RegExpr attribute="Keyword" context="Type" String="(?:struct|type)\s+&ident;" lookAhead="true"/>
+                <RegExpr attribute="Attribute" context="Attribute" String="@[a-zA-Z_][a-zA-Z0-9_]*" />
+
+                <!-- Dual source blending attribute detection -->
+                <RegExpr attribute="Attribute" context="BlendSrcAttribute" String="@blend_src\b"/>
+
+                <!-- Comments with enhanced documentation support -->
+                <Detect2Chars attribute="Comment" context="LineComment" char="/" char1="/"/>
+                <Detect2Chars attribute="Comment" context="BlockComment" char="/" char1="*" beginRegion="Comment"/>
+
+                <!-- Enhanced vector swizzle detection - rgba/xyzw -->
+                <RegExpr attribute="Special Char" context="#stay" String="\.[rgba]{1,4}\b" />
+                <RegExpr attribute="Special Char" context="#stay" String="\.[xyzw]{1,4}\b" />
+                <!-- Detect invalid mixed swizzle patterns -->
+                <RegExpr attribute="Error" context="#stay" String="\.[rgbaxyzw]{1,4}\b" />
+
+                <!-- Improved handling of memory access operations -->
+                <RegExpr attribute="Memory Access" context="#stay" String="&amp;\s*&ident;" />
+                <RegExpr attribute="Memory Access" context="#stay" String="\*\s*&ident;" />
+                <RegExpr attribute="Memory Access" context="#stay" String="&amp;(?![&amp;=])" />
+                <RegExpr attribute="Memory Access" context="#stay" String="\*(?![\*=])" />
+
+                <!-- Numbers - Updated patterns for literals with specific suffixes -->
+                <RegExpr attribute="Float" context="#stay" String="&decimal_float_lit;|&hex_float_lit;"/>
+                <RegExpr attribute="Decimal" context="#stay" String="&decimal_int_lit;"/>
+                <RegExpr attribute="Base-N" context="#stay" String="&hex_int_lit;"/>
+                <RegExpr attribute="Base-N" context="#stay" String="0b&bin_int;[iu]?"/>
+
+                <!-- Strings -->
+                <DetectChar attribute="String" context="String" char="&quot;"/>
+
+                <!-- Symbols with folding regions -->
+                <DetectChar attribute="Symbol" context="#stay" char="{" beginRegion="Brace1"/>
+                <DetectChar attribute="Symbol" context="#stay" char="}" endRegion="Brace1"/>
+                <DetectChar attribute="Symbol" context="#stay" char="[" beginRegion="Bracket1"/>
+                <DetectChar attribute="Symbol" context="#stay" char="]" endRegion="Bracket1"/>
+                <DetectChar attribute="Symbol" context="#stay" char="(" beginRegion="Paren1"/>
+                <DetectChar attribute="Symbol" context="#stay" char=")" endRegion="Paren1"/>
+                <AnyChar attribute="Symbol" context="#stay" String=",;:"/>
+
+                <!-- Enhanced operator detection for comprehensive coverage -->
+                <RegExpr attribute="Operator" context="#stay" String="(->|\+\+|--|&lt;&lt;=|&gt;&gt;=|&lt;&lt;|&gt;&gt;|\&amp;\&amp;|\|\||[&lt;&gt;=!]=|[+\-*/%&amp;|^&lt;&gt;!=~]|\+=|-=|\*=|/=|%=|\&amp;=|\|=|\^=)" />
+
+                <!-- Detect potential operator precedence issues according to 8.19 -->
+                <RegExpr attribute="Error" context="#stay" String="[&lt;&gt;=!]=\s*[&lt;&gt;]" lookAhead="true" />
+                <RegExpr attribute="Error" context="#stay" String="&lt;&lt;|&gt;&gt;\s*[&lt;&gt;=!]=" lookAhead="true" />
+                <RegExpr attribute="Error" context="#stay" String="\|\|\s*&amp;&amp;" lookAhead="true" />
+                <RegExpr attribute="Error" context="#stay" String="&amp;\s*[|^]|^\s*[&amp;|]|\|\s*[&amp;^]" lookAhead="true" />
+
+                <!-- Variables - Enhanced to differentiate declaration types according to 8.15 -->
+                <RegExpr attribute="Value Declaration" context="ConstDeclaration" String="(const)\b" lookAhead="true"/>
+                <RegExpr attribute="Value Declaration" context="OverrideDeclaration" String="(override)\b" lookAhead="true"/>
+                <RegExpr attribute="Value Declaration" context="LetDeclaration" String="(let)\b" lookAhead="true"/>
+                <RegExpr attribute="Variable Declaration" context="VarDeclaration" String="(var)\b" lookAhead="true"/>
+                <RegExpr attribute="Identifier" context="#stay" String="&ident;"/>
+            </context>
+
+            <!-- Enhanced shader stage attribute context for entry points -->
+            <context attribute="Attribute" lineEndContext="#pop" name="ShaderStageAttribute">
+                <DetectSpaces/>
+                <RegExpr attribute="Function Definition" context="#pop" String="fn\s+&ident;" lookAhead="true"/>
+                <RegExpr attribute="Normal Text" context="#pop" String="."/>
+            </context>
+
+            <!-- Special context for workgroup_size attribute -->
+            <context attribute="Attribute" lineEndContext="#pop" name="WorkgroupSizeAttribute">
+                <DetectSpaces/>
+                <DetectChar attribute="Symbol" context="WorkgroupSizeParams" char="("/>
+                <RegExpr attribute="Normal Text" context="#pop" String="."/>
+            </context>
+
+            <!-- Workgroup size parameter parsing -->
+            <context attribute="Normal Text" lineEndContext="#stay" name="WorkgroupSizeParams">
+                <DetectSpaces/>
+                <RegExpr attribute="Decimal" context="#stay" String="&decimal_int_lit;"/>
+                <RegExpr attribute="Identifier" context="#stay" String="&ident;"/>
+                <DetectChar attribute="Symbol" context="#pop#pop" char=")"/>
+                <DetectChar attribute="Symbol" context="#stay" char=","/>
+                <RegExpr attribute="Normal Text" context="#stay" String="."/>
+            </context>
+
+            <!-- Special context for blend_src attribute -->
+            <context attribute="Attribute" lineEndContext="#pop" name="BlendSrcAttribute">
+                <DetectSpaces/>
+                <DetectChar attribute="Symbol" context="BlendSrcParams" char="("/>
+                <RegExpr attribute="Normal Text" context="#pop" String="."/>
+            </context>
+
+            <!-- Blend source parameter parsing -->
+            <context attribute="Normal Text" lineEndContext="#stay" name="BlendSrcParams">
+                <DetectSpaces/>
+                <RegExpr attribute="Decimal" context="#stay" String="[01]"/>
+                <DetectChar attribute="Symbol" context="#pop#pop" char=")"/>
+                <RegExpr attribute="Normal Text" context="#stay" String="."/>
+            </context>
+
+            <!-- Standard variable declaration context -->
+            <context attribute="Normal Text" lineEndContext="#pop" name="VarDeclaration">
+                <DetectSpaces/>
+                <keyword attribute="Keyword" context="#stay" String="keywords"/>
+                <RegExpr attribute="Variable" context="#stay" String="&ident;"/>
+                <DetectChar attribute="Symbol" context="#stay" char=":"/>
+                <keyword attribute="Storage Class" context="#stay" String="storage"/>
+                <keyword attribute="Data Type" context="#stay" String="scalar_types"/>
+                <keyword attribute="Data Type" context="#stay" String="atomic_types"/>
+                <keyword attribute="Data Type" context="TemplateStart" String="vector_types" lookAhead="true"/>
+                <keyword attribute="Data Type" context="TemplateStart" String="matrix_types" lookAhead="true"/>
+                <keyword attribute="Data Type" context="#stay" String="vector_aliases"/>
+                <keyword attribute="Data Type" context="#stay" String="matrix_aliases"/>
+                <keyword attribute="Data Type" context="TemplateStart" String="type_generators" lookAhead="true"/>
+                <keyword attribute="Texture Type" context="TemplateStart" String="texture_types" lookAhead="true"/>
+                <DetectChar attribute="Symbol" context="#pop" char=";"/>
+                <DetectChar attribute="Symbol" context="#pop" char="="/>
+                <RegExpr attribute="Normal Text" context="#pop" String="."/>
+            </context>
+
+            <!-- Const declaration context with special handling - shader-creation time evaluation -->
+            <context attribute="Normal Text" lineEndContext="#pop" name="ConstDeclaration">
+                <DetectSpaces/>
+                <keyword attribute="Keyword" context="#stay" String="keywords"/>
+                <RegExpr attribute="Value Declaration" context="#stay" String="&ident;"/>
+                <DetectChar attribute="Symbol" context="#stay" char=":"/>
+                <keyword attribute="Data Type" context="#stay" String="scalar_types"/>
+                <keyword attribute="Data Type" context="#stay" String="atomic_types"/>
+                <keyword attribute="Data Type" context="TemplateStart" String="vector_types" lookAhead="true"/>
+                <keyword attribute="Data Type" context="TemplateStart" String="matrix_types" lookAhead="true"/>
+                <keyword attribute="Data Type" context="#stay" String="vector_aliases"/>
+                <keyword attribute="Data Type" context="#stay" String="matrix_aliases"/>
+                <keyword attribute="Data Type" context="TemplateStart" String="type_generators" lookAhead="true"/>
+                <keyword attribute="Texture Type" context="TemplateStart" String="texture_types" lookAhead="true"/>
+                <DetectChar attribute="Symbol" context="#pop" char=";"/>
+                <DetectChar attribute="Symbol" context="ConstExpressionContext" char="="/>
+                <RegExpr attribute="Normal Text" context="#pop" String="."/>
+            </context>
+
+            <!-- Let declaration context - runtime evaluation -->
+            <context attribute="Normal Text" lineEndContext="#pop" name="LetDeclaration">
+                <DetectSpaces/>
+                <keyword attribute="Keyword" context="#stay" String="keywords"/>
+                <RegExpr attribute="Value Declaration" context="#stay" String="&ident;"/>
+                <DetectChar attribute="Symbol" context="#stay" char=":"/>
+                <keyword attribute="Data Type" context="#stay" String="scalar_types"/>
+                <keyword attribute="Data Type" context="#stay" String="atomic_types"/>
+                <keyword attribute="Data Type" context="TemplateStart" String="vector_types" lookAhead="true"/>
+                <keyword attribute="Data Type" context="TemplateStart" String="matrix_types" lookAhead="true"/>
+                <keyword attribute="Data Type" context="#stay" String="vector_aliases"/>
+                <keyword attribute="Data Type" context="#stay" String="matrix_aliases"/>
+                <keyword attribute="Data Type" context="TemplateStart" String="type_generators" lookAhead="true"/>
+                <keyword attribute="Texture Type" context="TemplateStart" String="texture_types" lookAhead="true"/>
+                <DetectChar attribute="Symbol" context="#pop" char=";"/>
+                <DetectChar attribute="Symbol" context="RuntimeExpressionContext" char="="/>
+                <RegExpr attribute="Normal Text" context="#pop" String="."/>
+            </context>
+
+            <!-- Override declaration context with special handling for concrete scalar types -->
+            <context attribute="Normal Text" lineEndContext="#pop" name="OverrideDeclaration">
+                <DetectSpaces/>
+                <keyword attribute="Keyword" context="#stay" String="keywords"/>
+                <RegExpr attribute="Override Value" context="#stay" String="&ident;"/>
+                <DetectChar attribute="Symbol" context="#stay" char=":"/>
+                <!-- Override declarations are limited to concrete scalar types only -->
+                <keyword attribute="Data Type" context="#stay" String="scalar_types"/>
+                <DetectChar attribute="Symbol" context="#pop" char=";"/>
+                <DetectChar attribute="Symbol" context="OverrideExpressionContext" char="="/>
+                <RegExpr attribute="Normal Text" context="#pop" String="."/>
+            </context>
+
+            <!-- Context for const-expressions - shader-creation time -->
+            <context attribute="Normal Text" lineEndContext="#stay" name="ConstExpressionContext">
+                <DetectSpaces/>
+                <RegExpr attribute="Constant" context="#stay" String="true|false"/>
+                <RegExpr attribute="Decimal" context="#stay" String="&decimal_int_lit;|&hex_int_lit;|0b&bin_int;[iu]?"/>
+                <RegExpr attribute="Float" context="#stay" String="&decimal_float_lit;|&hex_float_lit;"/>
+                <keyword attribute="Built-in Function" context="#stay" String="functions"/>
+                <RegExpr attribute="Const Expression" context="#stay" String="&ident;"/>
+                <IncludeRules context="Normal"/>
+                <DetectChar attribute="Symbol" context="#pop" char=";"/>
+            </context>
+
+            <!-- Context for override-expressions - pipeline-creation time -->
+            <context attribute="Normal Text" lineEndContext="#stay" name="OverrideExpressionContext">
+                <DetectSpaces/>
+                <RegExpr attribute="Constant" context="#stay" String="true|false"/>
+                <RegExpr attribute="Decimal" context="#stay" String="&decimal_int_lit;|&hex_int_lit;|0b&bin_int;[iu]?"/>
+                <RegExpr attribute="Float" context="#stay" String="&decimal_float_lit;|&hex_float_lit;"/>
+                <keyword attribute="Built-in Function" context="#stay" String="functions"/>
+                <RegExpr attribute="Override Expression" context="#stay" String="&ident;"/>
+                <IncludeRules context="Normal"/>
+                <DetectChar attribute="Symbol" context="#pop" char=";"/>
+            </context>
+
+            <!-- Context for runtime expressions -->
+            <context attribute="Normal Text" lineEndContext="#stay" name="RuntimeExpressionContext">
+                <DetectSpaces/>
+                <IncludeRules context="Normal"/>
+                <DetectChar attribute="Symbol" context="#pop" char=";"/>
+            </context>
+
+            <!-- Module-scope directive contexts -->
+            <context attribute="Normal Text" lineEndContext="#stay" name="DirectiveStatement">
+                <RegExpr attribute="Directive Keyword" context="#stay" String="diagnostic\b"/>
+                <RegExpr attribute="Directive Keyword" context="EnableDirective" String="enable\b"/>
+                <RegExpr attribute="Directive Keyword" context="RequiresDirective" String="requires\b"/>
+                <RegExpr attribute="Normal Text" context="#pop" String="[^a-zA-Z0-9_]" lookAhead="true"/>
+            </context>
+
+            <context attribute="Normal Text" lineEndContext="#stay" name="EnableDirective">
+                <DetectSpaces/>
+                <keyword attribute="Enable Extension" context="#stay" String="enable_extensions"/>
+                <DetectChar attribute="Symbol" context="#pop#pop" char=";"/>
+                <RegExpr attribute="Normal Text" context="#stay" String="."/>
+            </context>
+
+            <context attribute="Normal Text" lineEndContext="#stay" name="RequiresDirective">
+                <DetectSpaces/>
+                <keyword attribute="Language Extension" context="#stay" String="language_extensions"/>
+                <DetectChar attribute="Symbol" context="#pop#pop" char=";"/>
+                <RegExpr attribute="Normal Text" context="#stay" String="."/>
+            </context>
+
+            <!-- Global Directive Parameters -->
+            <context attribute="Normal Text" lineEndContext="#stay" name="DirectiveParams">
+                <DetectChar attribute="Directive" context="#pop#pop" char=")"/>
+                <keyword attribute="Diagnostic Severity" context="#stay" String="diagnostic_severity"/>
+                <keyword attribute="Enable Extension" context="#stay" String="enable_extensions"/>
+                <keyword attribute="Language Extension" context="#stay" String="language_extensions"/>
+
+                <!-- Special values are still highlighted within directive parameters -->
+                <keyword attribute="Built-in Value" context="#stay" String="special_values"/>
+
+                <IncludeRules context="Normal"/>
+            </context>
+
+            <!-- Template type handling -->
+            <context attribute="Data Type" lineEndContext="#stay" name="TemplateStart">
+                <keyword attribute="Data Type" context="TemplateCheck" String="scalar_types"/>
+                <keyword attribute="Data Type" context="TemplateCheck" String="atomic_types"/>
+                <keyword attribute="Data Type" context="TemplateCheck" String="vector_types"/>
+                <keyword attribute="Data Type" context="TemplateCheck" String="matrix_types"/>
+                <keyword attribute="Data Type" context="TemplateCheck" String="type_generators"/>
+                <keyword attribute="Texture Type" context="TemplateCheck" String="texture_types"/>
+                <RegExpr attribute="Normal Text" context="#pop" String="." lookAhead="true"/>
+            </context>
+
+            <context attribute="Normal Text" lineEndContext="#pop" name="TemplateCheck">
+                <DetectSpaces/>
+                <DetectChar attribute="Symbol" context="TemplateArgs" char="&lt;"/>
+                <RegExpr attribute="Normal Text" context="#pop" String="." lookAhead="true"/>
+            </context>
+
+            <context attribute="Normal Text" lineEndContext="#stay" name="TemplateArgs">
+                <DetectSpaces/>
+                <keyword attribute="Storage Class" context="#stay" String="storage"/>
+                <keyword attribute="Data Type" context="#stay" String="scalar_types"/>
+                <keyword attribute="Data Type" context="#stay" String="atomic_types"/>
+                <keyword attribute="Data Type" context="#stay" String="vector_types"/>
+                <keyword attribute="Data Type" context="#stay" String="matrix_types"/>
+                <keyword attribute="Data Type" context="#stay" String="vector_aliases"/>
+                <keyword attribute="Data Type" context="#stay" String="matrix_aliases"/>
+                <keyword attribute="Data Type" context="#stay" String="type_generators"/>
+                <keyword attribute="Texture Type" context="#stay" String="texture_types"/>
+
+                <!-- Special values are highlighted within template args (like textures) -->
+                <keyword attribute="Built-in Value" context="#stay" String="special_values"/>
+
+                <keyword attribute="Enumerant" context="#stay" String="predeclared_enumerants"/>
+                <RegExpr attribute="Identifier" context="#stay" String="&ident;"/>
+                <DetectChar attribute="Symbol" context="#pop#pop#pop" char="&gt;"/>
+                <DetectChar attribute="Symbol" context="#stay" char=","/>
+                <!-- Allow nested template args -->
+                <DetectChar attribute="Symbol" context="TemplateArgs" char="&lt;"/>
+                <IncludeRules context="Normal"/>
+            </context>
+
+            <!-- Function context - Enhanced for entry point detection -->
+            <context attribute="Function Definition" lineEndContext="#stay" name="Function">
+                <DetectSpaces/>
+                <RegExpr attribute="Function Definition" context="#stay" String="fn\s+"/>
+                <RegExpr attribute="Function Definition" context="FunctionParams" String="&ident;"/>
+            </context>
+
+            <!-- Function parameters context - improved to highlight parameters and with IO builtin support -->
+            <context attribute="Normal Text" lineEndContext="#stay" name="FunctionParams">
+                <DetectSpaces/>
+                <DetectChar attribute="Symbol" context="#pop#pop" char="{" beginRegion="Brace1"/>
+                <RegExpr attribute="Parameter" context="#stay" String="&ident;\s*:"/>
+                <RegExpr attribute="Attribute" context="BuiltinAttr" String="@builtin\s*\(" lookAhead="true"/>
+                <RegExpr attribute="Attribute" context="#stay" String="@location\s*\([0-9]+\)"/>
+                <RegExpr attribute="Attribute" context="#stay" String="@interpolate\s*\([a-zA-Z_][a-zA-Z0-9_]*(?:\s*,\s*[a-zA-Z_][a-zA-Z0-9_]*)?\)"/>
+                <RegExpr attribute="Attribute" context="#stay" String="@blend_src\s*\([01]\)"/>
+                <RegExpr attribute="Attribute" context="#stay" String="@invariant"/>
+                <keyword attribute="Data Type" context="#stay" String="scalar_types"/>
+                <keyword attribute="Data Type" context="#stay" String="atomic_types"/>
+                <keyword attribute="Data Type" context="TemplateStart" String="vector_types" lookAhead="true"/>
+                <keyword attribute="Data Type" context="TemplateStart" String="matrix_types" lookAhead="true"/>
+                <keyword attribute="Data Type" context="#stay" String="vector_aliases"/>
+                <keyword attribute="Data Type" context="#stay" String="matrix_aliases"/>
+                <keyword attribute="Data Type" context="TemplateStart" String="type_generators" lookAhead="true"/>
+                <keyword attribute="Texture Type" context="TemplateStart" String="texture_types" lookAhead="true"/>
+                <RegExpr attribute="Identifier" context="#stay" String="&ident;"/>
+                <DetectChar attribute="Symbol" context="#stay" char="-"/>
+                <DetectChar attribute="Symbol" context="#stay" char="&gt;"/>
+                <IncludeRules context="Normal"/>
+            </context>
+
+            <!-- Special context for @builtin attributes to correctly highlight builtin values -->
+            <context attribute="Attribute" lineEndContext="#stay" name="BuiltinAttr">
+                <DetectSpaces/>
+                <RegExpr attribute="Attribute" context="#stay" String="@builtin\s*\("/>
+                <keyword attribute="Built-in Value" context="#stay" String="special_values"/>
+                <DetectChar attribute="Symbol" context="#pop" char=")"/>
+                <RegExpr attribute="Identifier" context="#stay" String="&ident;"/>
+                <RegExpr attribute="Normal Text" context="#stay" String="."/>
+            </context>
+
+            <!-- Type context -->
+            <context attribute="Type Definition" lineEndContext="#stay" name="Type">
+                <DetectSpaces/>
+                <RegExpr attribute="Type Definition" context="#stay" String="(?:struct|type)\s+"/>
+                <RegExpr attribute="Type Definition" context="#pop" String="&ident;"/>
+            </context>
+
+            <!-- Attribute context - Enhanced for shader IO attributes -->
+            <context attribute="Attribute" lineEndContext="#stay" name="Attribute">
+                <DetectChar attribute="Attribute" context="AttributeParams" char="("/>
+                <RegExpr attribute="Normal Text" context="#pop" String="[^(]" lookAhead="true"/>
+            </context>
+
+            <!-- Attribute parameters context - Enhanced for shader IO attributes -->
+            <context attribute="Normal Text" lineEndContext="#stay" name="AttributeParams">
+                <DetectChar attribute="Attribute" context="#pop#pop" char=")"/>
+                <keyword attribute="Diagnostic Severity" context="#stay" String="diagnostic_severity"/>
+                <keyword attribute="Enable Extension" context="#stay" String="enable_extensions"/>
+                <keyword attribute="Language Extension" context="#stay" String="language_extensions"/>
+
+                <!-- Special values should still be highlighted within attribute parameters -->
+                <keyword attribute="Built-in Value" context="#stay" String="special_values"/>
+
+                <RegExpr attribute="Decimal" context="#stay" String="[0-9]+"/>
+                <keyword attribute="Interpolation" context="#stay" String="interpolation"/>
+                <IncludeRules context="Normal"/>
+            </context>
+
+            <!-- Comments with enhanced documentation support -->
+            <context attribute="Comment" lineEndContext="#pop" name="LineComment">
+                <keyword attribute="Documentation" context="#stay" String="documentation_markers"/>
+                <RegExpr attribute="Comment Var" context="#stay" String="@param\s+&ident;" />
+                <RegExpr attribute="Alert" context="#stay" String="(TODO|FIXME|BUG|NOTE|XXX):" insensitive="true"/>
+                <RegExpr attribute="Information" context="#stay" String="@note:.*$" />
+                <RegExpr attribute="Warning" context="#stay" String="@warning:.*$" />
+                <IncludeRules context="##Comments" />
+            </context>
+
+            <context attribute="Comment" lineEndContext="#stay" name="BlockComment">
+                <keyword attribute="Documentation" context="#stay" String="documentation_markers"/>
+                <RegExpr attribute="Comment Var" context="#stay" String="@param\s+&ident;" />
+                <RegExpr attribute="Alert" context="#stay" String="(TODO|FIXME|BUG|NOTE|XXX):" insensitive="true"/>
+                <RegExpr attribute="Information" context="#stay" String="@note:.*$" />
+                <RegExpr attribute="Warning" context="#stay" String="@warning:.*$" />
+                <Detect2Chars attribute="Comment" context="#pop" char="*" char1="/" endRegion="Comment"/>
+                <IncludeRules context="##Comments" />
+            </context>
+
+            <!-- String with escape detection -->
+            <context attribute="String" lineEndContext="#stay" name="String">
+                <DetectChar attribute="String" context="#pop" char="&quot;"/>
+                <RegExpr attribute="Special Char" context="#stay" String="\\([nrt\\&quot;]|x[0-9a-fA-F]{2}|u\{[0-9a-fA-F]+\})"/>
+                <RegExpr attribute="Error" context="#stay" String="\\[^nrt\\&quot;xu]|\\x[^0-9a-fA-F]|\\x[0-9a-fA-F][^0-9a-fA-F]"/>
+            </context>
+        </contexts>
+
+        <itemDatas>
+            <!-- Common styles -->
+            <itemData name="Normal Text" defStyleNum="dsNormal" spellChecking="false"/>
+            <itemData name="Keyword" defStyleNum="dsKeyword" spellChecking="false"/>
+            <itemData name="Control Flow" defStyleNum="dsControlFlow" spellChecking="false"/>
+            <itemData name="Storage Class" defStyleNum="dsKeyword" spellChecking="false"/>
+            <itemData name="Attribute" defStyleNum="dsAttribute" spellChecking="false"/>
+            <itemData name="Interpolation" defStyleNum="dsAttribute" spellChecking="false"/>
+
+            <!-- Types -->
+            <itemData name="Data Type" defStyleNum="dsDataType" spellChecking="false"/>
+            <itemData name="Texture Type" defStyleNum="dsDataType" spellChecking="false"/>
+            <itemData name="Type Definition" defStyleNum="dsDataType" spellChecking="false"/>
+
+            <!-- Values and constants -->
+            <itemData name="Built-in Value" defStyleNum="dsExtension" spellChecking="false"/>
+            <itemData name="Constant" defStyleNum="dsConstant" spellChecking="false"/>
+            <itemData name="Built-in Function" defStyleNum="dsBuiltIn" spellChecking="false"/>
+            <itemData name="Function Definition" defStyleNum="dsFunction" spellChecking="false"/>
+
+            <!-- Variables -->
+            <itemData name="Variable" defStyleNum="dsVariable" spellChecking="false"/>
+            <itemData name="Variable Declaration" defStyleNum="dsVariable" bold="true" spellChecking="false"/>
+            <itemData name="Value Declaration" defStyleNum="dsVariable" bold="true" italic="true" spellChecking="false"/>
+            <itemData name="Override Value" defStyleNum="dsVariable" bold="true" underline="true" spellChecking="false"/>
+            <itemData name="Parameter" defStyleNum="dsVariable" italic="true" spellChecking="false"/>
+            <itemData name="Identifier" defStyleNum="dsNormal" spellChecking="false"/>
+
+            <!-- Operators -->
+            <itemData name="Symbol" defStyleNum="dsOperator" spellChecking="false"/>
+            <itemData name="Operator" defStyleNum="dsOperator" spellChecking="false"/>
+            <itemData name="Memory Access" defStyleNum="dsOperator" bold="true" spellChecking="false"/>
+
+            <!-- Comments and documentation -->
+            <itemData name="Comment" defStyleNum="dsComment"/>
+            <itemData name="Documentation" defStyleNum="dsDocumentation"/>
+            <itemData name="Comment Var" defStyleNum="dsCommentVar"/>
+            <itemData name="Information" defStyleNum="dsInformation"/>
+            <itemData name="Warning" defStyleNum="dsWarning"/>
+            <itemData name="Alert" defStyleNum="dsAlert"/>
+
+            <!-- Strings -->
+            <itemData name="String" defStyleNum="dsString"/>
+            <itemData name="Special Char" defStyleNum="dsSpecialChar" spellChecking="false"/>
+
+            <!-- Numbers -->
+            <itemData name="Decimal" defStyleNum="dsDecVal" spellChecking="false"/>
+            <itemData name="Base-N" defStyleNum="dsBaseN" spellChecking="false"/>
+            <itemData name="Float" defStyleNum="dsFloat" spellChecking="false"/>
+
+            <!-- Preprocessor-like -->
+            <itemData name="Directive Keyword" defStyleNum="dsPreprocessor" bold="true" spellChecking="false"/>
+            <itemData name="Directive" defStyleNum="dsPreprocessor" spellChecking="false"/>
+            <itemData name="Diagnostic Severity" defStyleNum="dsPreprocessor" spellChecking="false"/>
+            <itemData name="Enable Extension" defStyleNum="dsExtension" bold="true" spellChecking="false"/>
+            <itemData name="Language Extension" defStyleNum="dsExtension" spellChecking="false"/>
+            <itemData name="Enumerant" defStyleNum="dsExtension" spellChecking="false"/>
+
+            <!-- Special cases -->
+            <itemData name="Error" defStyleNum="dsError" spellChecking="false"/>
+            <itemData name="Const Expression" defStyleNum="dsConstant" italic="true" spellChecking="false"/>
+            <itemData name="Override Expression" defStyleNum="dsConstant" underline="true" spellChecking="false"/>
+        </itemDatas>
+    </highlighting>
+
+    <general>
+        <comments>
+            <comment name="singleLine" start="//"/>
+            <comment name="multiLine" start="/*" end="*/"/>
+        </comments>
+        <keywords casesensitive="1"/>
+        <folding indentationsensitive="false"/>
+    </general>
+</language>
